@@ -1,0 +1,135 @@
+PS C:\Users\HP\OneDrive\Documents\FlashPass> python buyer/load_test.py
+==================================================
+       FLASH PASS LOAD TEST
+==================================================
+
+Resetting seller...
+Reset response: {'message': 'Sale reset successfully', 'total_tickets': 100}
+
+Sending 1100 requests...
+Normal requests : 1000
+Duplicate retries: 100
+Concurrency      : 100
+
+==================================================
+             LOAD TEST RESULT
+==================================================
+Requests sent       : 1100
+New purchases       : 100
+Duplicate replays   : 96
+Sold out responses  : 904
+Errors              : 0
+Total time          : 6.289 seconds
+Requests/sec        : 174.90
+Median latency      : 551.50 ms
+P99 latency         : 858.72 ms
+
+==================================================
+             INVARIANT CHECK
+==================================================
+1. No overselling        : PASS
+2. Unique ticket numbers : PASS
+3. Request idempotency   : PASS
+4. Status consistency    : PASS
+
+==================================================
+             SELLER STATUS
+==================================================
+Tickets sold      : 100
+Tickets available : 0
+Tickets in status : 100
+
+==================================================
+             OVERALL: PASS
+==================================================
+
+
+
+==================================================
+       FLASH PASS LOAD TEST
+==================================================
+
+Resetting seller...
+Reset response: {'message': 'Sale reset successfully', 'total_tickets': 100}
+
+Sending 1100 requests...
+Normal requests : 1000
+Duplicate retries: 100
+Concurrency      : 100
+
+==================================================
+             LOAD TEST RESULT
+==================================================
+Requests sent       : 1100
+New purchases       : 100
+Duplicate replays   : 97
+Sold out responses  : 903
+Errors              : 0
+Total time          : 5.755 seconds
+Requests/sec        : 191.13
+Median latency      : 505.59 ms
+P99 latency         : 715.89 ms
+
+==================================================
+             INVARIANT CHECK
+==================================================
+1. No overselling        : PASS
+2. Unique ticket numbers : PASS
+3. Request idempotency   : PASS
+4. Status consistency    : PASS
+
+==================================================
+             SELLER STATUS
+==================================================
+Tickets sold      : 100
+Tickets available : 0
+Tickets in status : 100
+
+==================================================
+             OVERALL: PASS
+==================================================
+PS C:\Users\HP\OneDrive\Documents\FlashPass> python buyer/load_test.py
+==================================================
+       FLASH PASS LOAD TEST
+==================================================
+
+Resetting seller...
+Reset response: {'message': 'Sale reset successfully', 'total_tickets': 100}
+
+Sending 1100 requests...
+Normal requests : 1000
+Duplicate retries: 100
+Concurrency      : 100
+
+==================================================
+             LOAD TEST RESULT
+==================================================
+Requests sent       : 1100
+New purchases       : 100
+Duplicate replays   : 94
+Sold out responses  : 906
+Errors              : 0
+Total time          : 5.615 seconds
+Requests/sec        : 195.92
+Median latency      : 482.97 ms
+P99 latency         : 691.39 ms
+
+==================================================
+             INVARIANT CHECK
+==================================================
+1. No overselling        : PASS
+2. Unique ticket numbers : PASS
+3. Request idempotency   : PASS
+4. Status consistency    : PASS
+
+==================================================
+             SELLER STATUS
+==================================================
+Tickets sold      : 100
+Tickets available : 0
+Tickets in status : 100
+
+==================================================
+             OVERALL: PASS
+==================================================
+PS C:\Users\HP\OneDrive\Documents\FlashPass> 

@@ -21,20 +21,20 @@ The buyer/load client must generate concurrent requests, replay duplicate reques
 Architecture
 
                          Buyer / Load Client
-                                |
-                                v
-                     Load Balancer :9000
-                       /      |      \
-                      /       |       \
-                     v        v        v
-                Seller 1   Seller 2   Seller 3
-                 :8001      :8002      :8003
-                     \        |        /
-                      \       |       /
-                       v      v      v
-                         PostgreSQL
-                           flashpass
-                         tickets table
+                                  |
+                                  v
+                         Load Balancer :9000
+                           /      |      \
+                          /       |       \
+                         v        v        v
+                    Seller 1   Seller 2   Seller 3
+                     :8001      :8002      :8003
+                         \        |        /
+                          \       |       /
+                           v      v      v
+                             PostgreSQL
+                               flashpass
+                             tickets table
 
 The seller instances share PostgreSQL as the source of truth. Ticket allocation is protected by a PostgreSQL row-level lock rather than a Python process-local lock, which allows the same correctness mechanism to work across independent seller processes.
 
@@ -143,9 +143,9 @@ This database-level approach is important because a simple:
 
 SELECT request_id
         ↓
-if not found
+   if not found
         ↓
-assign ticket
+   assign ticket
 
 is not by itself atomic under concurrent duplicate requests.
 
@@ -190,9 +190,7 @@ Latency and Bottleneck Instrumentation
 main_instrumented.py adds timing headers to responses:
 
 X-Total-Ms
-
 X-DB-Ms
-
 X-App-Ms
 
 These allow the stress client to compare client-observed latency with time measured inside the application and database.
@@ -223,16 +221,71 @@ Target: http://127.0.0.1:8001
 Concurrency: 10, 50, 100, 250, 500, 1000, 2000
 Wave duration: 60 seconds per level
 
-Observed results:
+Observed Results
 
-Concurrency   RPS     p50(ms)    p99(ms)
-10            116.4    50.5       702.2
-50             74.4   435.6      3278.9
-100            56.2  1271.2      7510.7
-250            53.1  3330.0     19487.6
-500            49.0  6983.6     40946.3
-1000           42.8 13302.8     76748.1
-2000           42.2 28519.1     94754.9
+Concurrency
+
+RPS
+
+p50 (ms)
+
+p99 (ms)
+
+10
+
+116.4
+
+50.5
+
+702.2
+
+50
+
+74.4
+
+435.6
+
+3278.9
+
+100
+
+56.2
+
+1271.2
+
+7510.7
+
+250
+
+53.1
+
+3330.0
+
+19487.6
+
+500
+
+49.0
+
+6983.6
+
+40946.3
+
+1000
+
+42.8
+
+13302.8
+
+76748.1
+
+2000
+
+42.2
+
+28519.1
+
+94754.9
 
 The important observation is not simply that latency increased. Throughput decreased as concurrency increased, while p50 and p99 latency rose sharply.
 
@@ -270,7 +323,9 @@ All sellers point to the same PostgreSQL database.
 Example:
 
 uvicorn main_instrumented:app --host 127.0.0.1 --port 8001
+
 uvicorn main_instrumented:app --host 127.0.0.1 --port 8002
+
 uvicorn main_instrumented:app --host 127.0.0.1 --port 8003
 
 Then:
@@ -293,23 +348,41 @@ database.py reads DATABASE_URL from the environment.
 
 Running
 
-Install dependencies:
+1. Install Dependencies
 
 pip install -r requirements.txt
 
-Start one seller:
+2. Start One Seller
 
 uvicorn main:app --host 127.0.0.1 --port 8001
 
-For instrumented testing:
+3. Open Swagger API Documentation
+
+Once the seller is running, open the following URL in your browser:
+
+http://127.0.0.1:8001/docs
+
+The Swagger UI allows you to view and test the available endpoints:
+
+POST /reset
+POST /buy
+GET  /status
+
+4. Instrumented Testing
+
+For latency and bottleneck testing:
 
 uvicorn main_instrumented:app --host 127.0.0.1 --port 8001
 
-Run the correctness client:
+Swagger will then be available at:
+
+http://127.0.0.1:8001/docs
+
+5. Run the Correctness Client
 
 python Buyer\load_test.py
 
-Run the latency stress test:
+6. Run the Latency Stress Test
 
 python Buyer\stress_test.py
 
